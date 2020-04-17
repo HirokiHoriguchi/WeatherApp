@@ -23,8 +23,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-
-
 public class WeatherInfoActivity extends AppCompatActivity {
 
     @Override
@@ -51,7 +49,7 @@ public class WeatherInfoActivity extends AppCompatActivity {
 
     }
 
-//        非同期処理を行うためのクラス。AsyncTaskの<>の理解のためにいかに記述する。
+    //        非同期処理を行うためのクラス。AsyncTaskの<>の理解のためにいかに記述する。
 //        第一引数は引数、第二引数は経過について、第三引数は戻り値についての型を指定している。従って、それぞれの引数にintとかStringとかvoidがあることもある。
     private class WeatherInfoReceiver extends AsyncTask<String, String, String> {
         private String _cityName;
@@ -66,9 +64,10 @@ public class WeatherInfoActivity extends AppCompatActivity {
             _tvWeatherTelop = tvWeatherTelop;
             _tvWeatherDesc = tvWeatherDesc;
         }
-        private final String TAG = MainActivity.class.getSimpleName();
 
-//        別スレッドで非同期処理が実行され、その時に行う処理内容
+        private final String TAG = "doInBackground";
+
+        //        別スレッドで非同期処理が実行され、その時に行う処理内容
         @Override
         public String doInBackground(String... params) {
 //            MainAvtivityからgetIntentで取得した都道府県のidがparamsに格納されている。ここで、paramsは可変長変数であり、リストのような振る舞いをすることがわかっている。
@@ -92,36 +91,54 @@ public class WeatherInfoActivity extends AppCompatActivity {
 //                ここで、HTTP通信のGETメソッドを指定している。
                 con.setRequestMethod("GET");
                 con.setDoInput(true);
+                con.setInstanceFollowRedirects(false);
+                con.setDoOutput(false);
 //                ここで、接続を開始する。
                 con.connect();
-//                ここで、nullにしておいたisに、conに対してgetInputStreamメソッドを使用したものを代入する。
-                is = con.getInputStream();
-//                resultに、is2Stringメソッドに引数として、isを与えたものを代入する。この後に、以下の処理でそれぞれの接続等々を切断し、結果としてresultを返す。
-                result = is2String(is);
+                int responseCode = con.getResponseCode();
+                System.out.println("HTTPレスポンスコードを表示します");
+                System.out.println(responseCode);
+                Log.d(TAG, String.format("responseCode = %d", responseCode));
+                switch (responseCode) {
+                    case HttpURLConnection.HTTP_OK:
+                            //ここで、nullにしておいたisに、conに対してgetInputStreamメソッドを使用したものを代入する。ここが問題だと思われる。InputStreamが機能していない。
+                        is = con.getInputStream();
+                            //resultに、is2Stringメソッドに引数として、isを与えたものを代入する。この後に、以下の処理でそれぞれの接続等々を切断し、結果としてresultを返す。
+                        result = is2String(is);
+                        break;
+                    default:
+                        // responseCodeが200(HTTP OK)でない場合は何かのエラーでうまくいってません。
+                        break;
+                }
 
-            }
-            catch(MalformedURLException ex) {
-            }
-            catch(IOException ex) {
-            }
-            finally {
-                if(con != null) {
+
+//                ここで、nullにしておいたisに、conに対してgetInputStreamメソッドを使用したものを代入する。
+//                is = con.getInputStream();
+////                resultに、is2Stringメソッドに引数として、isを与えたものを代入する。この後に、以下の処理でそれぞれの接続等々を切断し、結果としてresultを返す。
+//                result = is2String(is);
+
+            } catch (MalformedURLException ex) {
+            } catch (IOException ex) {
+                System.out.println("情報取得に失敗しました");
+                ex.printStackTrace();
+                System.out.println(con);
+                System.out.println(is);
+            } finally {
+                if (con != null) {
                     con.disconnect();
                 }
 
-                if(is != null) {
+                if (is != null) {
                     try {
                         is.close();
-                    }
-                    catch(IOException ex) {
+                    } catch (IOException ex) {
                     }
                 }
             }
-
             return result;
         }
 
-//        メインスレッドで実行させる処理(非同期処理で得たAPIの結果などをViweに紐付け、反映させる等)
+        //        メインスレッドで実行させる処理(非同期処理で得たAPIの結果などをViweに紐付け、反映させる等)
         @Override
         public void onPostExecute(String result) {
             String desc = "";
@@ -135,17 +152,16 @@ public class WeatherInfoActivity extends AppCompatActivity {
                 JSONObject forecastNow = forecasts.getJSONObject(0);
                 dateLabel = forecastNow.getString("dateLabel");
                 telop = forecastNow.getString("telop");
-            }
-            catch(JSONException ex) {
+            } catch (JSONException ex) {
             }
 
-            _tvCityName.setText(_cityName + "の" + dateLabel + "の天気: ");
+            _tvCityName.setText(String.format("%sの%sの天気:", _cityName, dateLabel));
             _tvWeatherTelop.setText(telop);
             _tvWeatherDesc.setText(desc);
         }
 
 
-//          ここでは、取得したデータをsbという名前で宣言したStringBifferに代入したものを戻り値として返すメソッド。
+        //          ここでは、取得したデータをsbという名前で宣言したStringBifferに代入したものを戻り値として返すメソッド。
         private String is2String(InputStream is) throws IOException, UnsupportedEncodingException {
 //            BufferReaderのオブジェクトとして、readerを宣言し、これにBufferReaderにInputStreamを引数として渡してオブジェクトを生成する。
 //            そもそも、BufferReaderとは何か？文字ストリームを数文字「まとめて」取得するための文字入力ストリームクラス。
@@ -162,8 +178,8 @@ public class WeatherInfoActivity extends AppCompatActivity {
 //            char型のリストを用意し、、、よくわからんです。。
 //            ここで、int型のlineを宣言。whileのなかで、reader.read(b)の代入先として用いている。
 //            ここで、StringBufferクラスにガンガンappendして、charにキャストした数字も含む文字列をどんどん連結させていく。
-//            whileのなかで、lineが0未満、つまりもうreadメソッドで読み込むことができなくなた場合に、ループを抜ける。
-            while((st = reader.readLine()) != null) {
+//            whileのなかで、lineが0未満、つまりもうreadLineメソッドで読み込むことができなくなた場合に、ループを抜ける。
+            while ((st = reader.readLine()) != null) {
                 sb.append(st);
             }
 //            ここで、StringBufferのオブジェクトをString型にキャストして、戻り値として返す。これが99行目に該当する。
