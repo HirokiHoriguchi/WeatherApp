@@ -2,4 +2,9 @@
     <string name="app_name">お天気情報</string>
     <string name="tv_winfo_title">お天気詳細</string>
     <string name="menu_refresh">ページを更新します</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="google_title_text">Google Sign In</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="desc_firebase_lockup">Firebase logo and name</string>
 </resources>
