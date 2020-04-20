@@ -1,6 +1,7 @@
 package com.example.api_example;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,18 +9,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    private  SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         List<Map<String, String>> list = new ArrayList<Map<String,String>>();
 
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         map.put("id", "200010");
         list.add(map);
 
+
         ListView lvCityList = (ListView) findViewById(R.id.lvCityList);
 
         String[] from = {"name"};
@@ -69,8 +75,10 @@ public class MainActivity extends AppCompatActivity {
         lvCityList.setAdapter(adapter);
         lvCityList.setOnItemClickListener(new ListItemClickListener());
 
-    }
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
+    }
 
 
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
@@ -87,4 +95,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    };
 }
