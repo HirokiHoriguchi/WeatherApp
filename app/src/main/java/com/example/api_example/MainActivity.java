@@ -9,7 +9,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -25,6 +29,8 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static final String TAG = "MainActivity";
+    private ImageView imageView;
+    private Animation animation;
 
 
 
@@ -97,6 +103,17 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
+        imageView = findViewById(R.id.image_view);
+        animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.animation_set);
+
+        Button buttonFadeIn = findViewById(R.id.show_botton);
+        buttonFadeIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.startAnimation(animation);
+            }
+        });
+
     }
 
 
@@ -139,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
 
 }

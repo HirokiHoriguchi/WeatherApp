@@ -7,6 +7,13 @@ import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -24,6 +31,7 @@ import java.net.URL;
 
 
 public class WeatherInfoActivity extends AppCompatActivity {
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +54,18 @@ public class WeatherInfoActivity extends AppCompatActivity {
         WeatherInfoReceiver receiver = new WeatherInfoReceiver(CityName, tvCityName, tvWeatherTelop, tvWeatherDesc);
 //       WeatherInfoReceverのオブジェクトであるreceiverに、executeメソッドを用いて、引数をCityIdに設定する。これで,WeatherInfoReceiverクラスのオブジェクトであるreceiverで、URLレスポンスをさせるためのcityid番号が渡った。
         receiver.execute(CityId);
+
+        imageView = findViewById(R.id.image_view);
+        Button buttonFadeIn = findViewById(R.id.show_botton);
+        buttonFadeIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAnime();
+            }
+        });
+
+
+
 
     }
 
@@ -175,8 +195,6 @@ public class WeatherInfoActivity extends AppCompatActivity {
 //            文字列を連結する処理が多い場合に使用する。StringBufferの方がStringBuilderよりも文字列の連結に欠損が見られないなどの優位性があるみたい。
             StringBuffer sb = new StringBuffer();
             String st = "";
-//            char型のリストを用意し、、、よくわからんです。。
-//            ここで、int型のlineを宣言。whileのなかで、reader.read(b)の代入先として用いている。
 //            ここで、StringBufferクラスにガンガンappendして、charにキャストした数字も含む文字列をどんどん連結させていく。
 //            whileのなかで、lineが0未満、つまりもうreadLineメソッドで読み込むことができなくなた場合に、ループを抜ける。
             while ((st = reader.readLine()) != null) {
@@ -185,5 +203,24 @@ public class WeatherInfoActivity extends AppCompatActivity {
 //            ここで、StringBufferのオブジェクトをString型にキャストして、戻り値として返す。これが99行目に該当する。
             return sb.toString();
         }
+    }
+
+    private void setAnime(){
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 0.0f, 1.0f, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+        scaleAnimation.setDuration(2000);
+
+        RotateAnimation rotate = new RotateAnimation(0.0f, 120.0f,
+                Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.5f);
+
+        rotate.setDuration(2000);
+
+        AnimationSet animationSet = new AnimationSet(true);
+
+        animationSet.addAnimation(scaleAnimation);
+        animationSet.addAnimation(rotate);
+
+        imageView.startAnimation(animationSet);
     }
 }
