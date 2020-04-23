@@ -128,6 +128,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 //Firebaseで認証する。firebaseAuthWithGoogleに引数accountをつけて呼び出す。
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+                Log.d(TAG, "Firebaseにログイン成功");
             //Googleログイン失敗。
             }catch (ApiException e){
                 Log.w(TAG,"Google sign in failed", e);
@@ -157,7 +158,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                             Log.d(TAG, "ここでサインインが終了して、intent処理は終了しているよ！");
                         }else{
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication failed", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.main_layout), "認証失敗", Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
 

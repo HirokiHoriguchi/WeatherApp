@@ -8,6 +8,6 @@
 
     <item
         android:id="@+id/signoutbutton"
-        android:title="Signout"
+        android:title="@string/signed_out"
         app:showAsAction="always"/>
 </menu>
