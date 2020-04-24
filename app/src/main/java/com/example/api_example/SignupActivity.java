@@ -26,7 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 
-//View.OnClickListenerをimplementsしておく。
+
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
 
@@ -94,6 +94,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             String confirm_currentUser = currentUser.toString();
             Log.d(TAG, "confirm_currentUserには右の情報が含まれる=>" + confirm_currentUser);
             Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+            System.out.println(TAG);
+            System.out.println("conflictのテスト");
+            System.out.println("とりあえず修正");
             try {
                 startActivity(intent);
             }finally {
