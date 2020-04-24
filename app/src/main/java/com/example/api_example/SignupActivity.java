@@ -47,37 +47,37 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
-
-        //1.宣言したTextViewの変数に、対応するViewのidを取得する。
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
-
-        //ここで、SignupActivityをimplemetsした結果、それぞれのfindViewByIdメソッドに、OnclickListenerを実装しなくてすんだ。
-        //設計の観点から、OnClickListenerには3つの方法がある。1.今回のように、Activitiをimplementsする方法。2.無名のクラスにonClickの無名クラスをセットする方法。
-        //3.クリック後の処理を個別のクラスとして作成する方法。
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.disconnectButton).setOnClickListener(this);
-
-
-        //ここで、　GoogleSignInOptionsクラスに対して、引数としてDEFAULT_SIGN_INを指定し、オブジェクトを宣言する。
-        //この下に書いてあるのは、それぞれGoogleに対して要求するオプションになっている。
-        //requestIdtokenは、「Firebase クライアント アプリがカスタム バックエンド サーバーと通信する場合、
-        // そのサーバーに現在ログインしているユーザーを特定する必要が生じる場合があります。
-        // これを安全に行うために、正常なログイン後、ユーザーの ID トークンを HTTPS を使ってサーバーに送信します。
-        // 次に、サーバー上で ID トークンの完全性と信頼度を確認し、ID トークンの uid を取得します。
-        // サーバーで現在ログインしているユーザーを安全に特定するために、この方法で送信された uid を使用できます。」との説明があった。
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        //さらに、GoogleSIgnInClientクラスのオブジェクトとして宣言していたmGoogleSIgnInClientに、GoogleSignInオブジェクトを生成し、getClientメソッドを適用する
-        // 引数にrequestする内容のgsoを与える。
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        //やっているのは、onCreateメソッドにおいて、FirebaseAuthインスタンスを取得し、初期化すること。
-        mAuth = FirebaseAuth.getInstance();
+//        setContentView(R.layout.activity_signup);
+//
+//        //1.宣言したTextViewの変数に、対応するViewのidを取得する。
+//        mStatusTextView = findViewById(R.id.status);
+//        mDetailTextView = findViewById(R.id.detail);
+//
+//        //ここで、SignupActivityをimplemetsした結果、それぞれのfindViewByIdメソッドに、OnclickListenerを実装しなくてすんだ。
+//        //設計の観点から、OnClickListenerには3つの方法がある。1.今回のように、Activitiをimplementsする方法。2.無名のクラスにonClickの無名クラスをセットする方法。
+//        //3.クリック後の処理を個別のクラスとして作成する方法。
+//        findViewById(R.id.sign_in_button).setOnClickListener(this);
+//        findViewById(R.id.sign_out_button).setOnClickListener(this);
+//        findViewById(R.id.disconnectButton).setOnClickListener(this);
+//
+//
+//        //ここで、　GoogleSignInOptionsクラスに対して、引数としてDEFAULT_SIGN_INを指定し、オブジェクトを宣言する。
+//        //この下に書いてあるのは、それぞれGoogleに対して要求するオプションになっている。
+//        //requestIdtokenは、「Firebase クライアント アプリがカスタム バックエンド サーバーと通信する場合、
+//        // そのサーバーに現在ログインしているユーザーを特定する必要が生じる場合があります。
+//        // これを安全に行うために、正常なログイン後、ユーザーの ID トークンを HTTPS を使ってサーバーに送信します。
+//        // 次に、サーバー上で ID トークンの完全性と信頼度を確認し、ID トークンの uid を取得します。
+//        // サーバーで現在ログインしているユーザーを安全に特定するために、この方法で送信された uid を使用できます。」との説明があった。
+//
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+//        //さらに、GoogleSIgnInClientクラスのオブジェクトとして宣言していたmGoogleSIgnInClientに、GoogleSignInオブジェクトを生成し、getClientメソッドを適用する
+//        // 引数にrequestする内容のgsoを与える。
+//        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//        //やっているのは、onCreateメソッドにおいて、FirebaseAuthインスタンスを取得し、初期化すること。
+//        mAuth = FirebaseAuth.getInstance();
     }
 
     //onCreateの次。
