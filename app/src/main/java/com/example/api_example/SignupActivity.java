@@ -26,7 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 
-//View.OnClickListenerをimplementsしておく。 Confilict
+
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
 
@@ -90,19 +90,19 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
         //CurrentUserに入っている情報を確かめるための条件分岐とそのコードを記述。
-//        if (currentUser != null) {
-//            String confirm_currentUser = currentUser.toString();
-//            Log.d(TAG, "confirm_currentUserには右の情報が含まれる=>" + confirm_currentUser);
-//            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-//            try {
-//                startActivity(intent);
-//            }finally {
-//                Log.d(TAG, "intentが飛ばせていない");
-//            }
-//
-//        }else {
-//            Log.d(TAG, "ログインしていないときにLogcatにて出力されます。currentuserはnullです");
-//        }
+        if (currentUser != null) {
+            String confirm_currentUser = currentUser.toString();
+            Log.d(TAG, "confirm_currentUserには右の情報が含まれる=>" + confirm_currentUser);
+            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+            try {
+                startActivity(intent);
+            }finally {
+                Log.d(TAG, "intentが飛ばせていない");
+            }
+
+        }else {
+            Log.d(TAG, "ログインしていないときにLogcatにて出力されます。currentuserはnullです");
+        }
 
 //        //UpdateUIメソッドに対して、currentUserを渡している。updateUIメソッドの処理を詳しく見ていく。
 //        updateUI(currentUser);
