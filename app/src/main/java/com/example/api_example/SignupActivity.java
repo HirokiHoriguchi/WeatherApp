@@ -78,6 +78,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         //やっているのは、onCreateメソッドにおいて、FirebaseAuthインスタンスを取得し、初期化すること。
         mAuth = FirebaseAuth.getInstance();
+
+        System.out.println("コンフリクト");
     }
 
     //onCreateの次。
